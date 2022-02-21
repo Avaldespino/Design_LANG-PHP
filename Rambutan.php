@@ -32,37 +32,56 @@ if (!isset($_SESSION))
 <?php
 
 
-$image2 = "<form action=''>
-<input type='text' 'name='filename'>
-<input type='submit'>
-</form>";
-if (!empty($_POST['foodItem']) && !empty($_POST['ItemPlu']) && !empty($_POST['$_Post[\'foodItem\']'])){
+
+if (!empty($_POST['foodItem']) && !empty($_POST['ItemPlu'])){
+    $foodName = $_POST['foodItem'];
+    $foodPLU = $_POST['ItemPlu'];
     
-    $value = $_POST['foodItem'] . ' ' . $_POST['ItemPlu'] . ' ' . $_POST['filename']; 
+    $value = $_POST['foodItem'] . ' ' . $_POST['ItemPlu'];    
     array_push($_SESSION['item'],$value);
+    
+    
 
 
 
 }
-elseif (!empty($_POST['foodItem']) && !empty($_POST['ItemPlu'])){
-    $value = $_POST['foodItem'] . ' ' . $_POST['ItemPlu']; 
-    array_push($_SESSION['item'],$value);
-}
-
 $items = $_SESSION['item'];
 usort($items, 'strnatcasecmp');
 
+
+for ($I = 0; $I < count($_SESSION['item']); $I++){
+    
+    
+    $value = explode(" ", $_SESSION['item'][$I]);
+    if(!empty($_POST[$value[0]])){
+        $_SESSION['item'][$I] = $_SESSION['item'][$I] . " " . $_POST[$value[0]];
+    }
+    $view = $_SESSION['item'][$I];
+    echo "<tr> <td>$view</td> <td>$value[1]</td> <tr>";
+    
+}
+
+
+
+
+
+
+
+
+$items = $_SESSION['item'];
+
 foreach ($items as $row){
     $value = explode(" ",$row);
+    $imagePath = "<form action='' method = 'post'>
+<input type='text' name = $value[0]>
+<input type='submit'>
+</form>";
     if(count($value)== 2){
-    echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> <form action=''>
-    <input type='text' 'name='value[0]'>
-    <input type='submit'>
-    </form> </td> <td><img src='placeholder.png'> </td> <tr>"; 
+    echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> $imagePath </td> <td><img src='placeholder.png'> </td> <tr>"; 
 	}
     else{
         
-        echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> $value[2] </td><tr>"; 
+        echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> <img src=$value[2]> </td><tr> <br>"; 
         #<img src='$value[2]' alt='OIP.jfif'> </td> 
     }
 }
