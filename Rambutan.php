@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if (!isset($_SESSION))
 {
 	
@@ -26,6 +26,7 @@ if (!isset($_SESSION))
 	<tr>
 	<th>Item</th>
     	<th>PLU</th>
+    <th> For picture, find image source, copy image url and paste/submit </th>
 	</tr>
 
 
@@ -54,10 +55,11 @@ for ($I = 0; $I < count($_SESSION['item']); $I++){
     
     $value = explode(" ", $_SESSION['item'][$I]);
     if(!empty($_POST[$value[0]])){
-        $_SESSION['item'][$I] = $_SESSION['item'][$I] . " " . $_POST[$value[0]];
+        $url = $_POST[$value[0]];
+        $_SESSION['item'][$I] = $_SESSION['item'][$I] . " " . "$url";
     }
     $view = $_SESSION['item'][$I];
-    echo "<tr> <td>$view</td> <td>$value[1]</td> <tr>";
+   # echo "<tr> <td>$view</td> <td>$value[1]</td> <tr>";
     
 }
 
@@ -77,11 +79,11 @@ foreach ($items as $row){
 <input type='submit'>
 </form>";
     if(count($value)== 2){
-    echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> $imagePath </td> <td><img src='placeholder.png'> </td> <tr>"; 
+    echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> $imagePath </td> <td><img src='placeholder.png' style='width:128px;height:128px;'> </td> <tr>"; 
 	}
     else{
-        
-        echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> <img src=$value[2]> </td><tr> <br>"; 
+        $url = "\"" . $value[2]  . "\"";
+        echo "<tr> <td>$value[0]</td> <td> $value[1]</td> <td> <img src=$url style='width:128px;height:128px;'> </td><tr> <br>"; 
         #<img src='$value[2]' alt='OIP.jfif'> </td> 
     }
 }
